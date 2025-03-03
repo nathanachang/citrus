@@ -13,7 +13,7 @@ struct CitrusApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CitrusView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
