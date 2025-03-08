@@ -11,34 +11,22 @@ struct LocationModalView: View {
     let location: Location
     @Binding var isPresented: Bool
     
+    @State private var toggle1: Bool = false
+    
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: Constants.spacingDefault) {
-                Text("Location 1")
+                Text(location.name)
                     .font(
                     Font.custom("Inter", size: 32)
                       .weight(.bold)
                     )
                     .foregroundColor(Constants.textNeutral)
                     .frame(maxWidth: .infinity, alignment: .topLeading)
-                Button(action: {
-                    // Add your button action here
-                }) {
-                    HStack(alignment: .center, spacing: Constants.spacingTighter) {
-                        Image(.restaurant) // Replace with your actual image
-                        Text("Toggle Button") // Replace with your actual text
-                    }
-                    .padding(.horizontal, Constants.spacingTight)
-                    .padding(.vertical, Constants.spacingTighterEr)
-                    .background(Constants.bgActionNeutralDefault)
-                    .cornerRadius(Constants.spacingRadiusTighter)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Constants.spacingRadiusTighter)
-                            .inset(by: 0.5)
-                            .stroke(Constants.borderNeutral, lineWidth: Constants.borderDefault)
-                    )
+                Toggle(isOn: $toggle1) {
+                    Label("Toggle button", image: .restaurant)
                 }
-                .buttonStyle(PlainButtonStyle()) // Ensures no default button styling interferes
+                .toggleStyle(CitrusToggleStyle())
                 Text("Body text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin imperdiet justo neque, pretium varius ante ullamcorper vel.")
                     .font(Font.custom("Inter", size: 16))
                     .foregroundColor(Constants.textNeutral)
@@ -62,42 +50,28 @@ struct LocationModalView: View {
                     .background(Constants.borderNeutral)
                 HStack(alignment: .center, spacing: Constants.spacingTight) {
                     Button(action: {
-                        // Add your button action here
+                        
                     }) {
-                        HStack(alignment: .center, spacing: Constants.spacingTighter) {
-                            Image(.restaurant) // Replace with your desired image
-                            Text("Primary CTA") // Replace with your desired text
-                        }
-                        .padding(.horizontal, Constants.spacingTight)
-                        .padding(.vertical, Constants.spacingTighterEr)
-                        .background(Constants.bgActionHeroDefault)
-                        .cornerRadius(Constants.spacingRadiusTighter)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: Constants.spacingRadiusTighter)
-                                .inset(by: 0.5)
-                                .stroke(Constants.borderNeutral, lineWidth: Constants.borderDefault)
-                        )
+                        Label("Primary CTA", image: .restaurantInverse)
                     }
-                    .buttonStyle(PlainButtonStyle()) // Keeps the custom styling intact
+                    .buttonStyle(
+                        CitrusButtonStyle(
+                            size: .medium,
+                            fill: .fill
+                        )
+                    )
                     Button(action: {
-                        // Add your button action here
+                        
                     }) {
-                        HStack(alignment: .center, spacing: Constants.spacingTighter) {
-                            Image(.restaurant) // Replace with your desired image
-                            Text("Secondary") // Replace with your desired text
-                        }
-                        .padding(.horizontal, Constants.spacingTight)
-                        .padding(.vertical, Constants.spacingTighterEr)
-                        .background(Constants.bgActionNeutralDefault)
-                        .cornerRadius(Constants.spacingRadiusTighter)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: Constants.spacingRadiusTighter)
-                                .inset(by: 0.5)
-                                .stroke(Constants.borderNeutral, lineWidth: Constants.borderDefault)
-                        )
+                        Label("Secondary Button", image: .restaurant)
                     }
-                    .buttonStyle(PlainButtonStyle()) // Ensures default button styling doesn't override your custom design
-
+                    .buttonStyle(
+                        CitrusButtonStyle(
+                            size: .medium,
+                            fill: .outline
+                        )
+                    )
+                    
                 }
                 .padding(0)
             }

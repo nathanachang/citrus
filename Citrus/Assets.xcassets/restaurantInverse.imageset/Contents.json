@@ -11,7 +11,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "microphone.svg",
+      "filename" : "restaurantInverse.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -22,7 +22,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "microphoneInverse.svg",
+      "filename" : "restaurant.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

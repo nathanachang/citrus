@@ -18,7 +18,9 @@ struct CitrusButtonStyle: ButtonStyle {
             configuration.label
                 .padding(.horizontal, Constants.spacingTighter)
                 .padding(.vertical, Constants.spacingTightest)
+                .frame(width: hug ? nil : UIScreen.main.bounds.width * 0.8)
                 .background(fill == ButtonFill.fill ? Constants.bgCitrusPurpleDefault : Constants.bgActionNeutralAltDefault)
+                .foregroundColor(fill == ButtonFill.fill ? Constants.textInverse : Constants.textNeutral)
                 .cornerRadius(Constants.spacingRadiusTight)
                 .overlay(
                     RoundedRectangle(cornerRadius: Constants.spacingRadiusTight)
@@ -29,7 +31,9 @@ struct CitrusButtonStyle: ButtonStyle {
             configuration.label
                 .padding(.horizontal, Constants.spacingTight)
                 .padding(.vertical, Constants.spacingTighterEr)
+                .frame(width: hug ? nil : UIScreen.main.bounds.width * 0.8)
                 .background(fill == ButtonFill.fill ? Constants.bgCitrusPurpleDefault : Constants.bgActionNeutralAltDefault)
+                .foregroundColor(fill == ButtonFill.fill ? Constants.textInverse : Constants.textNeutral)
                 .cornerRadius(Constants.spacingRadiusTight)
                 .overlay(
                     RoundedRectangle(cornerRadius: Constants.spacingRadiusTight)
@@ -40,7 +44,9 @@ struct CitrusButtonStyle: ButtonStyle {
             configuration.label
                 .padding(.horizontal, Constants.spacingDefault)
                 .padding(.vertical, Constants.spacingTighter)
+                .frame(width: hug ? nil : UIScreen.main.bounds.width * 0.8)
                 .background(fill == ButtonFill.fill ? Constants.bgCitrusPurpleDefault : Constants.bgActionNeutralAltDefault)
+                .foregroundColor(fill == ButtonFill.fill ? Constants.textInverse : Constants.textNeutral)
                 .cornerRadius(Constants.spacingRadiusTight)
                 .overlay(
                     RoundedRectangle(cornerRadius: Constants.spacingRadiusTight)
@@ -48,6 +54,25 @@ struct CitrusButtonStyle: ButtonStyle {
                     .stroke(fill == ButtonFill.outline ? Constants.borderNeutral : Constants.borderClear, lineWidth: Constants.borderDefault)
                 )
         }
+    }
+}
+
+struct CitrusToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(.horizontal, Constants.spacingTight)
+            .padding(.vertical, Constants.spacingTighterEr)
+            .frame(height: 34, alignment: .center)
+            .background(configuration.isOn ? Constants.bgCitrusToggleOn : Constants.bgActionNeutralDefault)
+            .cornerRadius(Constants.spacingRadiusTighter)
+            .overlay(
+            RoundedRectangle(cornerRadius: Constants.spacingRadiusTighter)
+                .inset(by: 0.5)
+                .stroke(Constants.borderNeutral, lineWidth: Constants.borderDefault)
+            )
+            .onTapGesture {
+                configuration.isOn.toggle()
+            }
     }
 }
 

@@ -11,9 +11,11 @@ struct Constants {
     static let bgActionNeutralDefault: Color = .white
     static let bgActionHeroDefault: Color = Color(red: 1, green: 0.66, blue: 0.18)
     static let bgCitrusPurpleDefault: Color = Color(red: 0.49, green: 0.06, blue: 0.49)
+    static let bgCitrusToggleOn: Color = Color(red: 1, green: 0.75, blue: 1)
     static let bgActionNeutralAltDefault: Color = .white.opacity(0)
     static let bgNeutral: Color = .white
     static let textNeutral: Color = .black
+    static let textInverse: Color = .white
     static let borderNeutral: Color = Color(red: 0.54, green: 0.54, blue: 0.58)
     static let borderClear: Color = .white.opacity(0)
     
