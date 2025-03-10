@@ -119,4 +119,10 @@ struct CitrusView: View {
     }
 }
 
+struct CitrusView_Previews: PreviewProvider {
+    static var previews: some View {
+        CitrusView()
+    }
+}
+
 

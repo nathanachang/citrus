@@ -1,0 +1,10 @@
+//
+//  Localizable.strings
+//  Citis
+//
+//  Created by Paul Minyoo Kim on 2/6/25.
+//
+
+"Login.UsernameField.Title" = "Username";
+"Login.PasswordField.Title" = "Password";
+"Login.LoginButton.Title" = "Login";

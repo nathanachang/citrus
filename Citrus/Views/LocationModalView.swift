@@ -85,3 +85,4 @@ struct LocationModalView: View {
         .shadow(color: .black.opacity(0.25), radius: 4.1, x: 0, y: 4)
     }
 }
+
