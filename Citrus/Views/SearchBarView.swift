@@ -10,10 +10,13 @@ import SwiftUI
 struct SearchBarView: View {
     @Binding var searchQuery: String
     @FocusState.Binding var isSearchFocused: Bool
+    var onSearchQueryChanged: ((String) -> Void)?
+    var showClearButton: Bool = false
+    var onClearTapped: (() -> Void)?
 
     var body: some View {
         ZStack(alignment: .leading) {
-            TextField("Enter text here", text: $searchQuery)
+            TextField("Search for a location", text: $searchQuery)
                 .padding(.vertical, Constants.spacingTight)
                 .padding(.leading, Constants.spacingDefault + 18) // Space for left icon
                 .padding(.horizontal, Constants.spacingDefault)
@@ -28,6 +31,9 @@ struct SearchBarView: View {
                         .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
                 )
                 .focused($isSearchFocused)
+                .onChange(of: searchQuery) { newValue in
+                    onSearchQueryChanged?(newValue)
+                }
                 .onTapGesture {
                     isSearchFocused = true
                 }
@@ -39,9 +45,13 @@ struct SearchBarView: View {
             // Right Icon
             HStack {
                 Spacer()
-                Image(.microphone)
-                    .padding(.trailing, Constants.spacingDefault)
-                    .foregroundColor(.gray)
+                Button(action: {
+                    onClearTapped?()
+                }) {
+                    Image(systemName: showClearButton ? "xmark.circle.fill" : "mic")
+                        .padding(.trailing, Constants.spacingDefault)
+                        .foregroundColor(.gray)
+                }
             }
         }
         .frame(width: Constants.searchWidth)

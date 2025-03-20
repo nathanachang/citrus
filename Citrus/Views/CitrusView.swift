@@ -18,9 +18,11 @@ struct CitrusView: View {
     @FocusState private var isSearchFocused: Bool
     @State private var selectedLocation: Location? = nil
     @State private var isPopupPresented = false
+    @State private var showSearchResults = false
     
     @StateObject private var viewModel = LocationViewModel()
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var searchService = LocationSearchService()
     
     var body: some View {
         ZStack {
@@ -58,6 +60,7 @@ struct CitrusView: View {
             }
             .onTapGesture {
                 isSearchFocused = false
+                showSearchResults = false
             }
             
             // Conditionally show the Popup if `isPopupPresented` is true
@@ -78,13 +81,55 @@ struct CitrusView: View {
             }
             
             VStack {
-                SearchBarView(searchQuery: $searchQuery, isSearchFocused: $isSearchFocused)
+                VStack(spacing: 0) {
+                    SearchBarView(
+                        searchQuery: $searchQuery,
+                        isSearchFocused: $isSearchFocused,
+                        onSearchQueryChanged: { query in
+                            searchService.search(query: query, region: region)
+                            showSearchResults = !query.isEmpty
+                        },
+                        showClearButton: !searchQuery.isEmpty,
+                        onClearTapped: {
+                            searchQuery = ""
+                            showSearchResults = false
+                        }
+                    )
+                    
+                    // Search results dropdown
+                    if showSearchResults && !searchService.searchResults.isEmpty {
+                        SearchResultsView(
+                            searchResults: searchService.searchResults,
+                            onResultSelected: handleSearchResultSelection
+                        )
+                    }
+                }
                 
                 Spacer()
             }
-            
         }
     }
+    
+    // Handle selection of a search result
+    private func handleSearchResultSelection(_ mapItem: MKMapItem) {
+        guard let newLocation = searchService.createLocation(from: mapItem) else { return }
+        
+        // Update the map region
+        withAnimation {
+            region = MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: newLocation.lat, longitude: newLocation.lon),
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
+        }
+        
+        // Hide search results and update search query
+        showSearchResults = false
+        isSearchFocused = false
+        searchQuery = ""
+        
+        // Show the location modal
+        selectedLocation = newLocation
+        isPopupPresented = true
+    }
 }
-
 
