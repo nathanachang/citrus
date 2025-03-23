@@ -1,10 +1,3 @@
-//
-//  ProgressBarScreen.swift
-//  CitrusUI
-//
-//  Created by Paul Minyoo Kim on 3/9/25.
-//
-
 import SwiftUI
 
 struct ProgressBarExampleView: View {
@@ -71,16 +64,16 @@ struct ProgressBarExampleView: View {
                             .font(.subheadline)
                         
                         CitrusProgressBar(progress: 0.3)
-                            .height(4)
+                            .style(CitrusProgressBarStyle(height: 4))
                         
                         CitrusProgressBar(progress: 0.5)
-                            .height(8)
+                            .style(CitrusProgressBarStyle(height: 8))
                         
                         CitrusProgressBar(progress: 0.7)
-                            .height(12)
+                            .style(CitrusProgressBarStyle(height: 12))
                         
                         CitrusProgressBar(progress: 0.9)
-                            .height(16)
+                            .style(CitrusProgressBarStyle(height: 16))
                     }
                     
                     VStack(spacing: 16) {
@@ -88,20 +81,28 @@ struct ProgressBarExampleView: View {
                             .font(.subheadline)
                         
                         CitrusProgressBar(progress: 0.6)
-                            .progressColor(.blue)
-                            .backgroundColor(Color.blue.opacity(0.2))
+                            .style(CitrusProgressBarStyle(
+                                backgroundColor: Color.blue.opacity(0.2),
+                                progressColor: .blue
+                            ))
                         
                         CitrusProgressBar(progress: 0.6)
-                            .progressColor(.orange)
-                            .backgroundColor(Color.orange.opacity(0.2))
+                            .style(CitrusProgressBarStyle(
+                                backgroundColor: Color.orange.opacity(0.2),
+                                progressColor: .orange
+                            ))
                         
                         CitrusProgressBar(progress: 0.6)
-                            .progressColor(.purple)
-                            .backgroundColor(Color.purple.opacity(0.2))
+                            .style(CitrusProgressBarStyle(
+                                backgroundColor: Constants.bgCitrusPurpleDefault.opacity(0.2),
+                                progressColor: Constants.bgCitrusPurpleDefault
+                            ))
                         
                         CitrusProgressBar(progress: 0.6)
-                            .progressColor(.red)
-                            .backgroundColor(Color.red.opacity(0.2))
+                            .style(CitrusProgressBarStyle(
+                                backgroundColor: Color.red.opacity(0.2),
+                                progressColor: .red
+                            ))
                     }
                 }
                 
@@ -146,13 +147,13 @@ struct ProgressBarExampleView: View {
             
             Button(action: action) {
                 Text(actionTitle)
-                    .font(.system(size: 14, weight: .medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color(hex: "#27aa00"))
-                    .foregroundColor(.white)
-                    .cornerRadius(4)
             }
+            .buttonStyle(
+                CitrusButtonStyle(
+                    size: .small,
+                    fill: .fill
+                )
+            )
         }
     }
     

@@ -1,10 +1,3 @@
-//
-//  SegmentedControlsScreen.swift
-//  CitrusUI
-//
-//  Created by Paul Minyoo Kim on 3/9/25.
-//
-
 import SwiftUI
 
 struct SegmentedControlExampleView: View {
@@ -38,7 +31,6 @@ struct SegmentedControlExampleView: View {
                         options: [0, 1],
                         labels: [0: "Map", 1: "List"]
                     )
-                    .frame(height: 44)
                     
                     Text("Selected: \(viewModeOptions[viewMode])")
                         .font(.subheadline)
@@ -55,7 +47,6 @@ struct SegmentedControlExampleView: View {
                         options: [0, 1, 2],
                         labels: [0: "Day", 1: "Week", 2: "Month"]
                     )
-                    .frame(height: 44)
                     
                     Text("Selected: \(timeRangeOptions[timeRange])")
                         .font(.subheadline)
@@ -72,7 +63,6 @@ struct SegmentedControlExampleView: View {
                         options: [0, 1, 2, 3],
                         labels: [0: "All", 1: "Favorites", 2: "Recent", 3: "Archived"]
                     )
-                    .frame(height: 44)
                     
                     Text("Selected: \(filterOptions[filterOption])")
                         .font(.subheadline)
@@ -86,9 +76,9 @@ struct SegmentedControlExampleView: View {
                     
                     CitrusSegmentedControl(
                         selection: $sortOption,
-                        options: sortOptions
+                        options: sortOptions,
+                        labels: Dictionary(uniqueKeysWithValues: sortOptions.map { ($0, $0.capitalized) })
                     )
-                    .frame(height: 44)
                     
                     Text("Selected: \(sortOption)")
                         .font(.subheadline)
@@ -103,54 +93,48 @@ struct SegmentedControlExampleView: View {
                     CitrusSegmentedControl(
                         selection: $timeRange,
                         options: [0, 1, 2],
+                        labels: [0: "Day", 1: "Week", 2: "Month"],
+                        style: CitrusSegmentedControlStyle(
+                            backgroundColor: Constants.bgCitrusPink.opacity(0.2),
+                            accentColor: Constants.bgCitrusPurpleLight,
+                            textColor: Constants.textNeutral,
+                            selectedTextColor: Constants.textInverse,
+                            height: 40,
+                            cornerRadius: Constants.spacingRadiusDefault
+                        )
+                    )
+                }
+                
+                // Buttons to control selection
+                Group {
+                    Text("Control with Buttons")
+                        .font(.headline)
+                    
+                    HStack(spacing: 16) {
+                        ForEach(0..<3) { index in
+                            Button(action: {
+                                timeRange = index
+                            }) {
+                                Text(timeRangeOptions[index])
+                            }
+                            .buttonStyle(
+                                CitrusButtonStyle(
+                                    size: .small,
+                                    fill: timeRange == index ? .fill : .outline
+                                )
+                            )
+                        }
+                    }
+                    
+                    CitrusSegmentedControl(
+                        selection: $timeRange,
+                        options: [0, 1, 2],
                         labels: [0: "Day", 1: "Week", 2: "Month"]
                     )
-                    .accentColor(.blue)
-                    .backgroundColor(Color.blue.opacity(0.1))
-                    .frame(height: 44)
                 }
             }
             .padding()
         }
-    }
-}
-
-// MARK: - Modifier Extensions
-extension CitrusSegmentedControl {
-    func accentColor(_ color: Color) -> CitrusSegmentedControl {
-        var control = self
-        control.accentColor = color
-        return control
-    }
-    
-    func backgroundColor(_ color: Color) -> CitrusSegmentedControl {
-        var control = self
-        control.backgroundColor = color
-        return control
-    }
-    
-    func textColor(_ color: Color) -> CitrusSegmentedControl {
-        var control = self
-        control.textColor = color
-        return control
-    }
-    
-    func selectedTextColor(_ color: Color) -> CitrusSegmentedControl {
-        var control = self
-        control.selectedTextColor = color
-        return control
-    }
-    
-    func height(_ height: CGFloat) -> CitrusSegmentedControl {
-        var control = self
-        control.height = height
-        return control
-    }
-    
-    func cornerRadius(_ radius: CGFloat) -> CitrusSegmentedControl {
-        var control = self
-        control.cornerRadius = radius
-        return control
     }
 }
 

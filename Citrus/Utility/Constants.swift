@@ -34,4 +34,16 @@ struct Constants {
     
     static let searchWidth: CGFloat = 376
     
+    static let bgCitrusPurpleLight = Color(hex: "#c77dff")
+    static let bgCitrusPink = Color(hex: "#ffbeff")
+    
+    static let spacingLoose = 24.0
+    static let spacingLooser = 32.0
+    static let spacingLoosest = 40.0
+    
+    static let spacingRadiusTightest = 4.0
+    
+    static let borderMedium = 2.0
+    static let borderThick = 3.0
+    
 }
