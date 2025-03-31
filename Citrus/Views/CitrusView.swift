@@ -53,6 +53,29 @@ struct CitrusView: View {
                     }
                      */
                 }
+                .overlay(
+                    // Only show temporary pin if it exists
+                    viewModel.searchPin.map { tempPin in
+                        Map(coordinateRegion: .constant(region),
+                            annotationItems: [tempPin]) { pin in
+                            MapAnnotation(coordinate: pin.coordinate) {
+                                // Temporary pin styling
+                                VStack {
+                                    Image(systemName: "mappin.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.blue)
+                                    
+                                    Text(pin.title)
+                                        .font(.caption)
+                                        .padding(4)
+                                        .background(Color.white.opacity(0.8))
+                                        .cornerRadius(4)
+                                }
+                            }
+                        }
+                        .allowsHitTesting(false) // Let touch events pass through to the base map
+                    }
+                )
                 .edgesIgnoringSafeArea(.all)
             }
             .onAppear {
@@ -61,6 +84,7 @@ struct CitrusView: View {
             .onTapGesture {
                 isSearchFocused = false
                 showSearchResults = false
+                viewModel.clearTemporaryPin()
             }
             
             // Conditionally show the Popup if `isPopupPresented` is true
@@ -130,6 +154,7 @@ struct CitrusView: View {
         // Show the location modal
         selectedLocation = newLocation
         isPopupPresented = true
+        viewModel.setTemporaryPin(for: mapItem)
     }
 }
 
