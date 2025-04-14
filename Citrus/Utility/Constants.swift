@@ -46,4 +46,5 @@ struct Constants {
     static let borderMedium = 2.0
     static let borderThick = 3.0
     
+    static let websocketUrl: String = "wss://o3oy1m7dyc.execute-api.us-east-1.amazonaws.com/dev/"
 }

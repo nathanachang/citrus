@@ -15,9 +15,12 @@ class LocationViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     private let apiClient = APIClient()
+    private let webSocketManager = WebSocketManager()
     
     init() {
         fetchLocations()
+        webSocketManager.connect()
+        sendMessage("User Connected")
     }
     
     func fetchLocations() {
@@ -48,5 +51,9 @@ class LocationViewModel: ObservableObject {
     
     func clearTemporaryPin() {
         searchPin = nil
+    }
+    
+    func sendMessage(_ text: String) {
+        webSocketManager.sendMessage(text)
     }
 }
