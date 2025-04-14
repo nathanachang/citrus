@@ -7,9 +7,11 @@
 
 import Combine
 import Foundation
+import MapKit
 
 class LocationViewModel: ObservableObject {
     @Published var locations: [Location] = []
+    @Published var searchPin: TemporaryAnnotation? = nil
     
     private var cancellables = Set<AnyCancellable>()
     private let apiClient = APIClient()
@@ -33,5 +35,18 @@ class LocationViewModel: ObservableObject {
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    func setTemporaryPin(for mapItem: MKMapItem) {
+        let coordinate = mapItem.placemark.coordinate
+        searchPin = TemporaryAnnotation(
+            id: UUID().uuidString,
+            coordinate: coordinate,
+            title: mapItem.name ?? "Location"
+        )
+    }
+    
+    func clearTemporaryPin() {
+        searchPin = nil
     }
 }
