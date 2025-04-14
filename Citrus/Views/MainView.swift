@@ -42,45 +42,71 @@ struct CustomTabBar: View {
     @Binding var selectedTab: Int
     let accentColor: Color
     
-    // Tab item data
-    private let tabs = [
-        (title: "Map", icon: "map"),
-        (title: "Plan", icon: "list.bullet"),
-        (title: "Saved", icon: "bookmark"),
-        (title: "Inbox", icon: "envelope.badge"),
-        (title: "Profile", icon: "person.circle")
-    ]
-    
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(0..<tabs.count, id: \.self) { index in
-                Button(action: {
-                    withAnimation {
-                        selectedTab = index
-                    }
-                }) {
-                    VStack(spacing: 4) {
-                        Image(systemName: tabs[index].icon)
-                            .font(.system(size: 22))
-                            .foregroundColor(selectedTab == index ? accentColor : Color.gray)
-                        
-                        Text(tabs[index].title)
-                            .font(.caption)
-                            .foregroundColor(selectedTab == index ? accentColor : Color.gray)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                }
+            // Map Tab
+            tabButton(title: "Map", index: 0) {
+                Image(.map)
+                    .renderingMode(.template)
+            }
+            
+            // Plan Tab
+            tabButton(title: "Plan", index: 1) {
+                Image(.plan)
+                    .renderingMode(.template)
+            }
+            
+            // Saved Tab
+            tabButton(title: "Saved", index: 2) {
+                Image(.saved)
+                    .renderingMode(.template)
+            }
+            
+            // Inbox Tab
+            tabButton(title: "Inbox", index: 3) {
+                Image(.inbox)
+                    .renderingMode(.template)
+            }
+            
+            // Profile Tab
+            tabButton(title: "Profile", index: 4) {
+                Image(.profile)
+                    .renderingMode(.template)
             }
         }
         .background(Color(UIColor.systemBackground))
         .overlay(
             Rectangle()
-                .frame(height: 0.5)
-                .foregroundColor(Color.gray.opacity(0.3)),
+                .frame(height: 1)
+                .foregroundColor(Color.gray.opacity(0.2)),
             alignment: .top
         )
-        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
+        .shadow(color: Color.black.opacity(0.03), radius: 3, x: 0, y: -2)
+    }
+    
+    // Helper function to create tab buttons with custom icon content
+    @ViewBuilder
+    private func tabButton<IconContent: View>(
+        title: String,
+        index: Int,
+        @ViewBuilder icon: @escaping () -> IconContent
+    ) -> some View {
+        Button(action: {
+            withAnimation {
+                selectedTab = index
+            }
+        }) {
+            VStack(spacing: 6) {
+                icon()
+                    .foregroundColor(selectedTab == index ? accentColor : Color.gray.opacity(0.7))
+                
+                Text(title)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(selectedTab == index ? accentColor : Color.gray.opacity(0.7))
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+        }
     }
 }
 
