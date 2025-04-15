@@ -15,7 +15,7 @@ enum WebSocketAction {
         
         switch self {
         case .sendLocation(let lat, let long):
-            payload["action"] = "sendLocation"
+            payload["action"] = "location"
             payload["latitude"] = lat
             payload["longitude"] = long
             payload["timestamp"] = Date().timeIntervalSince1970

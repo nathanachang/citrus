@@ -20,7 +20,6 @@ class LocationViewModel: ObservableObject {
     init() {
         fetchLocations()
         webSocketManager.connect()
-        sendMessage("User Connected")
     }
     
     func fetchLocations() {

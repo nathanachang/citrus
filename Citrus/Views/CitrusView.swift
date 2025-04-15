@@ -80,6 +80,12 @@ struct CitrusView: View {
             }
             .onAppear {
                 viewModel.fetchLocations()
+                viewModel.sendMessage(
+                    WebSocketAction.sendLocation(
+                        latitude: locationManager.userLocation?.coordinate.latitude ?? 40.759211,
+                        longitude: locationManager.userLocation?.coordinate.longitude ?? -73.984638
+                    ).buildPayload() ?? "Client-side Coordinate Error"
+                )
             }
             .onTapGesture {
                 isSearchFocused = false
