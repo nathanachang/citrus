@@ -23,6 +23,8 @@ struct Constants {
     static let spacingTighter: CGFloat = 8
     static let spacingTighterEr: CGFloat = 6
     static let spacingTightest: CGFloat = 4
+    static let spacingLoose: CGFloat = 18
+    static let spacingLooser: CGFloat = 24
     static let spacingRadiusTighter: CGFloat = 6
     static let spacingDefault: CGFloat = 16
     static let spacingRadiusDefault: CGFloat = 12

@@ -35,23 +35,15 @@ struct CitrusView: View {
                     MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.lat, longitude: location.lon)) {
                         Button(action: {
                             selectedLocation = location
-                            isPopupPresented = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                isPopupPresented = true
+                            }
                         }) {
                             Image(systemName: "mappin.circle.fill")
                                 .foregroundColor(.red)
                                 .font(.title)
                         }
                     }
-                    /*
-                    MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.lat, longitude: location.lon)) {
-                        VStack {
-                            Image(systemName: "person.circle.fill")
-                                .foregroundColor(.blue)
-                                .font(.title)
-                                .background(Circle().fill(Color.white))
-                        }
-                    }
-                     */
                 }
                 .overlay(
                     // Only show temporary pin if it exists
@@ -93,23 +85,6 @@ struct CitrusView: View {
                 viewModel.clearTemporaryPin()
             }
             
-            // Conditionally show the Popup if `isPopupPresented` is true
-            if isPopupPresented, let location = selectedLocation {
-                GeometryReader { geometry in
-                    Color.black.opacity(0.5) // Semi-transparent background to dim the rest of the view
-                        .onTapGesture {
-                            withAnimation {
-                                isPopupPresented = false // Dismiss pop-up when tapping outside
-                            }
-                        }
-                        .edgesIgnoringSafeArea(.all) // Ensure it covers the entire screen
-                    LocationModalView(location: location, isPresented: $isPopupPresented)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height / 2) // This centers the view
-                        .zIndex(1)
-                }
-                .edgesIgnoringSafeArea(.all) // Ensures background is visible outside the popup
-            }
-            
             VStack {
                 VStack(spacing: 0) {
                     SearchBarView(
@@ -138,6 +113,28 @@ struct CitrusView: View {
                 Spacer()
             }
         }
+        // Use separate condition for sheet to ensure reactivity
+        .sheet(
+            isPresented: $isPopupPresented,
+            onDismiss: {
+                print("Sheet dismissed") // Debug print
+            },
+            content: {
+                if let location = selectedLocation {
+                    LocationBSView(location: location, isPresented: $isPopupPresented)
+                        .presentationDetents([.height(250)])
+                        .presentationDragIndicator(.visible)
+                        .presentationBackground(Constants.bgNeutral)
+                        .presentationCornerRadius(20)
+                } else {
+                    Text("No location selected")
+                        .onAppear {
+                            print("Sheet presented without location") // Debug print
+                            isPopupPresented = false
+                        }
+                }
+            }
+        )
     }
     
     // Handle selection of a search result
@@ -157,10 +154,11 @@ struct CitrusView: View {
         isSearchFocused = false
         searchQuery = ""
         
-        // Show the location modal
+        // Show the location modal - use same pattern as map annotations
         selectedLocation = newLocation
-        isPopupPresented = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            isPopupPresented = true
+        }
         viewModel.setTemporaryPin(for: mapItem)
     }
 }
-
