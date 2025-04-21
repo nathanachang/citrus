@@ -34,4 +34,5 @@ struct Constants {
     
     static let searchWidth: CGFloat = 376
     
+    static let websocketUrl: String = "wss://o3oy1m7dyc.execute-api.us-east-1.amazonaws.com/dev/"
 }
