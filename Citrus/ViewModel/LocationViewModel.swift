@@ -12,7 +12,9 @@ import MapKit
 class LocationViewModel: ObservableObject {
     @Published var locations: [Location] = []
     @Published var searchPin: TemporaryAnnotation? = nil
-    
+    @Published var userLocation: CLLocation?
+        
+    private var locationManager = LocationManager()
     private var cancellables = Set<AnyCancellable>()
     private let apiClient = APIClient()
     private let webSocketManager = WebSocketManager()
@@ -20,6 +22,8 @@ class LocationViewModel: ObservableObject {
     init() {
         fetchLocations()
         webSocketManager.connect()
+        locationManager.$userLocation
+            .assign(to: &$userLocation)
     }
     
     func fetchLocations() {

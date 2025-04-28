@@ -21,7 +21,6 @@ struct CitrusView: View {
     @State private var showSearchResults = false
     
     @StateObject private var viewModel = LocationViewModel()
-    @StateObject private var locationManager = LocationManager()
     @StateObject private var searchService = LocationSearchService()
     
     var body: some View {
@@ -74,8 +73,8 @@ struct CitrusView: View {
                 viewModel.fetchLocations()
                 viewModel.sendMessage(
                     WebSocketAction.sendLocation(
-                        latitude: locationManager.userLocation?.coordinate.latitude ?? 40.759211,
-                        longitude: locationManager.userLocation?.coordinate.longitude ?? -73.984638
+                        latitude: viewModel.userLocation?.coordinate.latitude ?? 0.0,
+                        longitude: viewModel.userLocation?.coordinate.longitude ?? 0.0
                     ).buildPayload() ?? "Client-side Coordinate Error"
                 )
             }
@@ -83,6 +82,19 @@ struct CitrusView: View {
                 isSearchFocused = false
                 showSearchResults = false
                 viewModel.clearTemporaryPin()
+            }
+            .onChange(of: viewModel.userLocation) { newLocation in
+                if let newLocation = newLocation {
+                    // Send your WebSocket message or whatever you want
+                    print("Location updated: \(newLocation.coordinate.latitude), \(newLocation.coordinate.longitude)")
+                    
+                    viewModel.sendMessage(
+                        WebSocketAction.sendLocation(
+                            latitude: newLocation.coordinate.latitude,
+                            longitude: newLocation.coordinate.longitude
+                        ).buildPayload() ?? "Client-side Coordinate Error"
+                    )
+                }
             }
             
             VStack {

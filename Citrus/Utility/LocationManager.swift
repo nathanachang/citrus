@@ -22,8 +22,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // If new location is available, update userLocation
-        if let newLocation = locations.first {
-            userLocation = newLocation
+        if let newLocation = locations.last {
+            DispatchQueue.main.async {
+                self.userLocation = newLocation
+            }
         }
     }
     
