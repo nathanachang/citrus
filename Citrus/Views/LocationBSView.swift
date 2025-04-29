@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct LocationBSView: View {
-    let location: Location
+    let spot: Spot
     @Binding var isPresented: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.spacingTight) {
-            Text(location.name)
+            Text(spot.name)
                 .font(
                 Font.custom("Instrument Sans", size: 20)
                   .weight(.bold)

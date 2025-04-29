@@ -144,14 +144,17 @@ class LocationSearchService: NSObject, ObservableObject {
     }
     
     // Creates a Location model from an MKMapItem
-    func createLocation(from mapItem: MKMapItem, userId: Int = 0) -> Location? {
+    func createSpot(from mapItem: MKMapItem, spot_id: Int = 0) -> Spot? {
         guard let name = mapItem.name, let location = mapItem.placemark.location else { return nil }
         
-        return Location(
-            user_id: userId,
-            latitude: location.coordinate.latitude,
-            longitude: location.coordinate.longitude,
-            name: name
+        return Spot(
+            spot_id: spot_id,
+            name: name,
+            location: Location(
+                latitude: location.coordinate.latitude,
+                longitude: location.coordinate.longitude,
+                timestamp: Date().timeIntervalSince1970
+            )
         )
     }
     

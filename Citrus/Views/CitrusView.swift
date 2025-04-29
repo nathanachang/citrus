@@ -16,7 +16,7 @@ struct CitrusView: View {
     )
     @State private var searchQuery: String = ""
     @FocusState private var isSearchFocused: Bool
-    @State private var selectedLocation: Location? = nil
+    @State private var selectedSpot: Spot? = nil
     @State private var isPopupPresented = false
     @State private var showSearchResults = false
     
@@ -29,11 +29,11 @@ struct CitrusView: View {
                 Map(
                     coordinateRegion: $region,
                     showsUserLocation: true,
-                    annotationItems: viewModel.locations
-                ) { location in
-                    MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: location.lat, longitude: location.lon)) {
+                    annotationItems: viewModel.spots
+                ) { spot in
+                    MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: spot.location.lat, longitude: spot.location.lon)) {
                         Button(action: {
-                            selectedLocation = location
+                            selectedSpot = spot
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 isPopupPresented = true
                             }
@@ -70,7 +70,7 @@ struct CitrusView: View {
                 .edgesIgnoringSafeArea(.all)
             }
             .onAppear {
-                viewModel.fetchLocations()
+                viewModel.fetchSpots()
                 viewModel.sendMessage(
                     WebSocketAction.sendLocation(
                         latitude: viewModel.userLocation?.coordinate.latitude ?? 0.0,
@@ -85,9 +85,6 @@ struct CitrusView: View {
             }
             .onChange(of: viewModel.userLocation) { newLocation in
                 if let newLocation = newLocation {
-                    // Send your WebSocket message or whatever you want
-                    print("Location updated: \(newLocation.coordinate.latitude), \(newLocation.coordinate.longitude)")
-                    
                     viewModel.sendMessage(
                         WebSocketAction.sendLocation(
                             latitude: newLocation.coordinate.latitude,
@@ -132,8 +129,8 @@ struct CitrusView: View {
                 print("Sheet dismissed") // Debug print
             },
             content: {
-                if let location = selectedLocation {
-                    LocationBSView(location: location, isPresented: $isPopupPresented)
+                if let spot = selectedSpot {
+                    LocationBSView(spot: spot, isPresented: $isPopupPresented)
                         .presentationDetents([.height(250)])
                         .presentationDragIndicator(.visible)
                         .presentationBackground(Constants.bgNeutral)
@@ -151,12 +148,12 @@ struct CitrusView: View {
     
     // Handle selection of a search result
     private func handleSearchResultSelection(_ mapItem: MKMapItem) {
-        guard let newLocation = searchService.createLocation(from: mapItem) else { return }
+        guard let newSpot = searchService.createSpot(from: mapItem) else { return }
         
         // Update the map region
         withAnimation {
             region = MKCoordinateRegion(
-                center: CLLocationCoordinate2D(latitude: newLocation.lat, longitude: newLocation.lon),
+                center: CLLocationCoordinate2D(latitude: newSpot.location.lat, longitude: newSpot.location.lon),
                 span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             )
         }
@@ -167,7 +164,7 @@ struct CitrusView: View {
         searchQuery = ""
         
         // Show the location modal - use same pattern as map annotations
-        selectedLocation = newLocation
+        selectedSpot = newSpot
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             isPopupPresented = true
         }

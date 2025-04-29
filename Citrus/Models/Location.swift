@@ -10,39 +10,31 @@ import CoreLocation
 
 struct Location: Identifiable, Codable, Equatable {
     var id: UUID
-    var user_id: Int
     var lat: Double
     var lon: Double
-    var name: String
+    var timestamp: TimeInterval
     
     enum CodingKeys: String, CodingKey {
-        case user_id
         case lat
         case lon
-        case name
+        case timestamp
     }
     
     // Initialize with UUID for id
-    init(user_id: Int, latitude: Double, longitude: Double, name: String) {
+    init(latitude: Double, longitude: Double, timestamp: TimeInterval) {
         self.id = UUID()
-        self.user_id = user_id
         self.lat = latitude
         self.lon = longitude
-        self.name = name
+        self.timestamp = timestamp
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        // Decode the fields you need
-        self.user_id = try container.decode(Int.self, forKey: .user_id)
+
         self.lat = try container.decode(Double.self, forKey: .lat)
         self.lon = try container.decode(Double.self, forKey: .lon)
-        self.name = try container.decode(String.self, forKey: .name)
+        self.timestamp = try container.decode(TimeInterval.self, forKey: .timestamp)
 
-        // Generate a new UUID for 'id'
         self.id = UUID()
-        
-        // We don't decode 'someField' or any other field not included in the CodingKeys
     }
 }

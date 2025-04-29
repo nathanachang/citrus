@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationModalView: View {
-    let location: Location
+    let spot: Spot
     @Binding var isPresented: Bool
     
     @State private var toggle1: Bool = false
@@ -16,7 +16,7 @@ struct LocationModalView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: Constants.spacingDefault) {
-                Text(location.name)
+                Text(spot.name)
                     .font(
                     Font.custom("Inter", size: 32)
                       .weight(.bold)
