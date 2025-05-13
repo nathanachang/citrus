@@ -9,10 +9,16 @@ import Combine
 import Foundation
 import MapKit
 
-class LocationViewModel: ObservableObject {
+class CitrusViewModel: ObservableObject {
     @Published var spots: [Spot] = []
+    @Published var users: [User] = []
+    @Published var selectedUser: UserViewModel? = nil
     @Published var searchPin: TemporaryAnnotation? = nil
     @Published var userLocation: CLLocation?
+    
+    var mapAnnotations: [MapItem] {
+        spots.map { .spot($0) } + users.map { .user($0) }
+    }
         
     private var locationManager = LocationManager()
     private var cancellables = Set<AnyCancellable>()
@@ -21,6 +27,7 @@ class LocationViewModel: ObservableObject {
     
     init() {
         fetchSpots()
+        fetchUsers()
         webSocketManager.connect()
         locationManager.$userLocation
             .assign(to: &$userLocation)
@@ -43,6 +50,23 @@ class LocationViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func fetchUsers() {
+        apiClient.fetchUsers()
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("Finished fetching users.")
+                case .failure(let error):
+                    print("Error fetching users: \(error)")
+                }
+            }, receiveValue: { [weak self] users in
+                DispatchQueue.main.async {
+                    self?.users = users
+                }
+            })
+            .store(in: &cancellables)
+    }
+    
     func setTemporaryPin(for mapItem: MKMapItem) {
         let coordinate = mapItem.placemark.coordinate
         searchPin = TemporaryAnnotation(
@@ -54,6 +78,11 @@ class LocationViewModel: ObservableObject {
     
     func clearTemporaryPin() {
         searchPin = nil
+    }
+    
+    func switchToUser(_ user: User) {
+        selectedUser = UserViewModel(user: user)
+        print("Switching to user \(user.pref_name)")
     }
     
     func sendMessage(_ text: String) {
